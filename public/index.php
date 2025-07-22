@@ -7,11 +7,11 @@ use App\Service\CitoyenService;
 use App\Repository\CitoyenRepository;
 
 // Récupération des variables d’environnement
-$host = getenv('DB_HOST') ?: 'db';            // 'db' pour docker local
-$port = getenv('DB_PORT') ?: '5432';
-$db   = getenv('DB_NAME') ?: 'app_db';
-$user = getenv('DB_USER') ?: 'astou';
-$pass = getenv('DB_PASSWORD') ?: 'Astou0000';
+$host = getenv('DB_HOST') ;         
+$port = getenv('DB_PORT') ;
+$db   = getenv('DB_NAME') ;
+$user = getenv('DB_USER') ;
+$pass = getenv('DB_PASSWORD') ;
 
 $dsn = "pgsql:host=$host;port=$port;dbname=$db";
 
