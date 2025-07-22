@@ -1,56 +1,33 @@
 <?php
+namespace App\config;
+class Routeur{
+   
+    public static function resolve(array $route){
 
-namespace APP\CORE;
+ 
+        $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+        $Uris = trim($requestUri, '/');
 
-use APP\CORE\ENUM\KeyRoute;
+        if (isset($route[$Uris])) {
 
-class Router
-{
+            $route = $route[$Uris];
+        
+                // if (isset($route['middleware'])) {
+                //     Middleware::execute($route['middleware']);
+                // }
+            
 
-    private static array $routes = [];
-
-    public static function resolve(): void
-    {
-        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-        foreach (self::$routes as $route => $info) {
-            preg_match_all('/\{(\w+)\}/', $route, $paramNames);
-            $pattern = preg_replace('/\{(\w+)\}/', '([^/]+)', $route);
-            $pattern = '#^' . $pattern . '$#';
-
-            if (preg_match($pattern, $uri, $matches)) {
-                array_shift($matches);
-                $params = array_combine($paramNames[1], $matches);
-
-                $controllerName = $info[KeyRoute::CONTROLLER->value];
-                $action = $info[KeyRoute::ACTION->value];
-
-
-                if (isset($info[KeyRoute::MIDDLEWARES->value]) && is_array($info[KeyRoute::MIDDLEWARES->value])) {
-                    foreach ($info[KeyRoute::MIDDLEWARES->value] as $middlewareClass) {
-                        if (class_exists($middlewareClass) && method_exists($middlewareClass, '__invoke')) {
-                            
-                            $middleware = new $middlewareClass();
-                            $middleware();
-                        }
-                    }
-                }
-
-                $controller = new $controllerName();
-
-                call_user_func_array([$controller, $action], $params);
-                return;
-            }
+            $controllerClass = $route['controller'];
+            $method = $route['method'];
+            $controller = new $controllerClass();
+            $controller->$method();
+        } else {
+            echo "404 Not Found";
         }
 
-        echo "404 Not Found";
+
+    
     }
 
-    public static function setRoute(array $route): void
-    {
-        if (!is_array($route) || $route === []) {
-            throw new \Exception("Veillez donnés le tableau des routes ca dois etre un table non vide !", 1);
-        }
-        self::$routes = $route;
-    }
+
 }
