@@ -1,0 +1,32 @@
+{
+    "name": "boombaye/app-daf",
+    "description": "Application DAF en PHP MVC",
+    "type": "project",
+    "version": "1.0.0",
+    "autoload": {
+        "psr-4": {
+            "Boombaye\\AppDaf\\": "src/",
+            "App\\Config\\": "app/config/",
+            "App\\Core\\": "app/core/",
+            "App\\Core\\Middlewares\\": "app/core/middlewares/",
+            "App\\Core\\Abstract\\": "app/core/abstract/",
+            "App\\Entity\\": "src/entity/",
+            "App\\Controller\\": "src/controller/",
+            "App\\Repository\\": "src/repository/",
+            "App\\Service\\": "src/service/"
+        }
+    },
+    "authors": [
+        {
+            "name": "AstouMba",
+            "email": "assalih1303@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "scripts": {
+        "database:migrate": "php migrations/migration.php",
+        "database:seeder": "php seeders/seeder.php"
+    }
+}
