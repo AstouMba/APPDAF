@@ -3,12 +3,9 @@ use App\Controller\CitoyenController;
 
 
 
-$uris = [
-    "" => [
+return $routes = [
+    '/api/citoyen/cni' => [
         'controller' => CitoyenController::class,
-        'method' => 'rechercherParCni'
+        'action' => 'rechercherParCni'
     ],
-   
-
-
 ];

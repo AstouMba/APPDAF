@@ -1,33 +1,45 @@
 <?php
-namespace App\config;
-class Routeur{
-   
-    public static function resolve(array $route){
+namespace App\Core;
 
- 
-        $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
-        $Uris = trim($requestUri, '/');
+use App\Config\Middlewares;
 
-        if (isset($route[$Uris])) {
+class Router
+{
+    public static function resolve(array $routes)
+    {
+        // Nettoyage de l’URI
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $uri = rtrim($uri, '/'); // supprime le slash final sauf si c’est la racine
+        $uri = $uri === '' ? '/' : $uri;
 
-            $route = $route[$Uris];
-        
-                // if (isset($route['middleware'])) {
-                //     Middleware::execute($route['middleware']);
-                // }
-            
+        $method = $_SERVER['REQUEST_METHOD'];
 
-            $controllerClass = $route['controller'];
-            $method = $route['method'];
-            $controller = new $controllerClass();
-            $controller->$method();
+        // Format attendu : $routes['/path']['GET'] ou ['POST']
+        if (isset($routes[$uri]) && isset($routes[$uri][$method])) {
+            $route = $routes[$uri][$method];
+
+            // // Middleware éventuel
+            // if (isset($route['middleware'])) {
+            //     $middlewares = Middlewares::getMiddlewares();
+            //     $middlewareKey = $route['middleware'];
+
+            //     if (isset($middlewares[$middlewareKey])) {
+            //         $middleware = $middlewares[$middlewareKey];
+            //         $middleware(); // Exécution
+            //     }
+            // }
+
+            $controllerName = $route['controller'];
+            $actionName = $route['action'];
+
+            $controller = new $controllerName();
+            $controller->$actionName();
         } else {
-            echo "404 Not Found";
+            http_response_code(404);
+            echo json_encode([
+                'status' => 'error',
+                'message' => "Route non trouvée : $method $uri"
+            ]);
         }
-
-
-    
     }
-
-
 }

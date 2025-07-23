@@ -11,6 +11,4 @@ abstract class AbstractEntity extends SetterGetter{
      public function toJson(): string {
         return json_encode($this->toArray());
     }
-
-
 }

@@ -42,7 +42,7 @@ class CitoyenController extends AbstractController
                 200,
                 "Le numéro de carte d'identité a été retrouvé"
             );
-            
+
         } else {
             $response = new Response(
                 null,
@@ -55,6 +55,5 @@ class CitoyenController extends AbstractController
         $this->renderJson($response);
     }
 
-    // Implémentation obligatoire, tu peux laisser vide ou l’utiliser plus tard
     public function show(): void {}
 }
